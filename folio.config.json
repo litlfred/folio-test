@@ -1,0 +1,11 @@
+{
+  "contentType": "paper",
+  "adapter": "paper",
+  "adapterModule": "./folio-assistant/adapters/paper/index.ts",
+  "feedbackDir": ".folio-feedback",
+  "skills": ".claude/skills/local",
+  "viewer": {
+    "dir": "folio-assistant/viewer",
+    "port": 8080
+  }
+}
