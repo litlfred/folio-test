@@ -59,15 +59,3 @@ Neither Lean nor TeX is installed by default; `--check-deps` reports what is
 missing. If this folio turns out not to need formal mathematics, switching
 `contentType` to `"document"` drops both toolchains — `content_profile_check`
 will then list any math blocks standing in the way.
-
-## Note on the submodule pin
-
-`folio-assistant` is currently pinned to
-[PR #142](https://github.com/litlfred/folio-assistant/pull/142)'s branch rather
-than to `main`, because the `folio_init` scaffolder that generated this repo
-has not merged yet. Once it does, bump the submodule to `main`:
-
-```sh
-git -C folio-assistant fetch origin main && git -C folio-assistant checkout origin/main
-git add folio-assistant && git commit -m "chore: track folio-assistant main"
-```
