@@ -1,0 +1,15 @@
+# Build output
+build/
+.folio-feedback/
+node_modules/
+
+# Generated QA reports
+bib-qa.json
+
+# Editor / OS
+.DS_Store
+*.swp
+
+# Lean build artifacts
+.lake/
+*.olean
