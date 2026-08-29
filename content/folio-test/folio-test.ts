@@ -14,5 +14,6 @@ export default paper({
   date: new Date().toISOString().slice(0, 10),
   chapters: [
     chapterRef({ dir: "introduction" }),
+    chapterRef({ dir: "euclidean-algorithm" }),
   ],
 });
