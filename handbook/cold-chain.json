@@ -1,0 +1,15 @@
+{
+  "name": "cold-chain",
+  "title": "Cold Chain Handbook",
+  "directories": [
+    {
+      "id": "folio",
+      "path": "folio/",
+      "dependents": "reproduce",
+      "graphKinds": [
+        "folio"
+      ],
+      "description": "The content of Cold Chain Handbook — its document, chapters and blocks."
+    }
+  ]
+}

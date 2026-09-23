@@ -1,0 +1,1 @@
+Vaccines lose potency when they are stored outside their temperature range, and the loss cannot be seen. This handbook sets out how to keep every vaccine in its range, from the national store to the session.

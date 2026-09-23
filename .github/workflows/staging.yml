@@ -1,0 +1,38 @@
+name: Staging preview
+
+# A before/after preview of this folio for every pull request, published to
+# STAGING/<branch>/ on gh-pages, with the ChangeSet (what changed, block by
+# block) beside it. The mechanics live in the platform's reusable workflow.
+#
+# The site is built by the platform's build-document-site.ts: one page per
+# document, with an anchor on every labelled block.
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  issue_comment:
+    types: [created, edited]
+  workflow_dispatch:
+
+# What the reusable workflow needs, and no more: publish the preview, comment
+# on the pull request, and read its comments for the review page.
+permissions:
+  contents: write
+  pull-requests: write
+  issues: read
+
+jobs:
+  staging:
+    uses: litlfred/folio-assistant/.github/workflows/folio-staging.yml@main
+    with:
+      # The document folio lives in handbook/, beside the paper folio at the
+      # root. The platform is checked out at platform/, which is where
+      # handbook/'s builder shim (../platform) expects it.
+      build_command: 'cd handbook && bun run ../platform/cat-harness/scripts/build-document-site.ts --out ../_site'
+      site_dir: _site
+      folio_dir: handbook/folio
+      todos_dir: handbook/todos
+      platform_dir: platform
+      # Compare with the branch the pull request targets, so a PR stacked on
+      # another branch is compared with that branch rather than with main.
+      base_ref: ${{ github.base_ref || 'main' }}
