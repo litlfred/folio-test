@@ -13,3 +13,7 @@ bib-qa.json
 # Lean build artifacts
 .lake/
 *.olean
+
+# ojcx: build output and the platform checkout (a symlink locally, a checkout in CI)
+_site/
+/platform
