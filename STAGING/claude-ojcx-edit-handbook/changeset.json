@@ -1,0 +1,62 @@
+{
+  "$schema": "folio-changeset/v1",
+  "folio": "handbook/folio",
+  "base": {
+    "ref": "origin/claude/ojcx-document-folio",
+    "commit": "350060ea23bfb709100b0924eb9ebd12432abcec"
+  },
+  "head": {
+    "ref": "worktree",
+    "commit": null
+  },
+  "summary": {
+    "added": 0,
+    "removed": 0,
+    "changed": 2,
+    "unchanged": 0,
+    "renamed": 0,
+    "prose": 2,
+    "manifest": 0,
+    "moved": 0
+  },
+  "changes": [
+    {
+      "change": "changed",
+      "label": "prose:overview",
+      "aspects": [
+        "prose"
+      ],
+      "base": {
+        "file": "cold-chain/introduction/overview.ts",
+        "kind": "prose",
+        "section": "cold-chain/introduction::sec:overview",
+        "index": 0
+      },
+      "head": {
+        "file": "cold-chain/introduction/overview.ts",
+        "kind": "prose",
+        "section": "cold-chain/introduction::sec:overview",
+        "index": 0
+      }
+    },
+    {
+      "change": "changed",
+      "label": "tbl:storage-temperatures",
+      "aspects": [
+        "prose"
+      ],
+      "base": {
+        "file": "cold-chain/introduction/storage-temperatures.ts",
+        "kind": "table",
+        "section": "cold-chain/introduction::sec:overview",
+        "index": 1
+      },
+      "head": {
+        "file": "cold-chain/introduction/storage-temperatures.ts",
+        "kind": "table",
+        "section": "cold-chain/introduction::sec:overview",
+        "index": 1
+      }
+    }
+  ]
+}

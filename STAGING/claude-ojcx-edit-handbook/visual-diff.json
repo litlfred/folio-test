@@ -1,0 +1,21 @@
+{
+  "$schema": "folio-visual-diff/v1",
+  "tolerance": 24,
+  "blocks": {
+    "tbl:storage-temperatures": {
+      "label": "tbl:storage-temperatures",
+      "kind": "table",
+      "before": {
+        "png": null,
+        "missing": "page"
+      },
+      "after": {
+        "png": "visual/tbl_storage-temperatures.after.png",
+        "width": 736,
+        "height": 475
+      },
+      "changed": null,
+      "diff": null
+    }
+  }
+}

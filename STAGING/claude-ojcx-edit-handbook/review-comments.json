@@ -1,0 +1,11 @@
+{
+  "$schema": "folio-review-comments/v1",
+  "repo": "litlfred/folio-test",
+  "pr": 6,
+  "commit": "c7064e81dfb09cc408bdbb9c91c5903420efafda",
+  "generatedAt": "2026-09-23T18:05:33.242Z",
+  "comments": [],
+  "malformed": [],
+  "untagged": 0,
+  "verdicts": []
+}
