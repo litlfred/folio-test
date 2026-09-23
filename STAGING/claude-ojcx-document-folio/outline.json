@@ -1,0 +1,1 @@
+{"$schema":"folio-outline/v1","documents":[{"slug":"cold-chain","title":"Cold Chain Handbook","page":"cold-chain/index.html","chapters":[{"title":"Introduction","label":"chap:introduction","sections":[{"key":"cold-chain/introduction::sec:overview","title":"Overview","label":"sec:overview","blocks":["prose:overview","tbl:storage-temperatures"]}]}]}]}

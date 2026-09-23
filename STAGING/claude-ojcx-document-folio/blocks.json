@@ -1,0 +1,12 @@
+{
+  "tbl:storage-temperatures": {
+    "hash": "c656ac04e205441f234b469de85461666c422c4e96d3a8a35787da8225839ccb",
+    "renamedFrom": [],
+    "section": "cold-chain/introduction::sec:overview"
+  },
+  "prose:overview": {
+    "hash": "98aac4ccbce9d64157f15465743344864bac747567484d051a755674a0b7813a",
+    "renamedFrom": [],
+    "section": "cold-chain/introduction::sec:overview"
+  }
+}
