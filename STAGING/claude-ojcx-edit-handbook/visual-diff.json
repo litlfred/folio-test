@@ -6,16 +6,17 @@
       "label": "tbl:storage-temperatures",
       "kind": "table",
       "before": {
-        "png": null,
-        "missing": "page"
+        "png": "visual/tbl_storage-temperatures.before.png",
+        "width": 736,
+        "height": 502
       },
       "after": {
         "png": "visual/tbl_storage-temperatures.after.png",
         "width": 736,
         "height": 475
       },
-      "changed": null,
-      "diff": null
+      "changed": 0.10905833188983198,
+      "diff": "visual/tbl_storage-temperatures.diff.png"
     }
   }
 }

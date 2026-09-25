@@ -57,7 +57,11 @@
   .heatwrap { overflow-x: auto; margin: 1rem 0; }
   table.heat { border-collapse: separate; border-spacing: 2px; font-size: .95rem; }
   table.heat caption { text-align: left; color: var(--muted); padding-bottom: .4rem; }
-  table.heat th, table.heat td { padding: .35rem .6rem; text-align: left; border-radius: .25rem; }
+  table.heat th, table.heat td { padding: .35rem .6rem; text-align: left; border-radius: .25rem; overflow-wrap: anywhere; }
+  /* Fit the width rather than scroll sideways: a keyboard user cannot reach a
+     scrolled-off column (the ojcx run clipped QA at 1000 px). The wrapper is
+     still focusable, for the narrowest screens. */
+  table.heat { width: 100%; }
   table.heat thead th { font-weight: 600; border-bottom: 1px solid var(--rule); }
   table.heat td { font-variant-numeric: tabular-nums; }
   .h1 { background: #86b6ef; color: #1b1b1b; } .h2 { background: #3987e5; color: #1b1b1b; } .h3 { background: #1c5cab; color: #ffffff; }
@@ -85,13 +89,13 @@ function fill(d,f,r){
   var rel=location.pathname.slice(r.length);
   if(rel===''||rel.charAt(rel.length-1)==='/')rel+='index.html';
   if(!f.mainPagesKnown){
-    d.appendChild(link(f.mainSite+'/','compare with main \u2197'));
+    d.appendChild(link(f.mainSite+'/','compare with '+(f.beforeRef||'main')+' \u2197'));
   }else if(f.newPages.indexOf(rel)>=0){
-    d.appendChild(link(f.mainSite+'/','main \u2197'));
+    d.appendChild(link(f.mainSite+'/',(f.beforeRef||'main')+' \u2197'));
     d.appendChild(document.createTextNode(' '));
     d.appendChild(el('span',{style:'opacity:.85'},'(new page)'));
   }else{
-    d.appendChild(link(f.mainSite+'/'+rel,'compare with main \u2197'));
+    d.appendChild(link(f.mainSite+'/'+rel,'compare with '+(f.beforeRef||'main')+' \u2197'));
   }
   d.appendChild(sep());d.appendChild(link(f.runUrl,'build log'));
   stamp(f);
@@ -131,7 +135,7 @@ window.addEventListener('resize',measure);window.addEventListener('load',measure
   <a href="../index.html">All documents</a>
 </div>
 <div class="viewrow"><label for="view">Show every change as</label> <select id="view"></select></div>
-<div id="heat" class="heatwrap"></div>
+<div id="heat" class="heatwrap" tabindex="0" role="region" aria-label="Heat map: where to look first"></div>
 <div id="changes"></div>
 </main>
 </div>
@@ -344,7 +348,7 @@ var renderVisual = function renderVisual(doc, v, prefix, group) {
   const lg = doc.createElement("legend");
   lg.textContent = "Show";
   fs.appendChild(lg);
-  const stage = doc.createElement("div"), show = (i) => {
+  const stage = doc.createElement("div"), has = (s) => !!(s && s.png), first = views.findIndex(([id]) => id === "diff" || id === "after" && has(v.after) || id === "before" && has(v.before)), start = first < 0 ? 0 : first, show = (i) => {
     while (stage.firstChild)
       stage.removeChild(stage.firstChild);
     stage.appendChild(views[i][2]());
@@ -354,7 +358,7 @@ var renderVisual = function renderVisual(doc, v, prefix, group) {
     r.type = "radio";
     r.name = group;
     r.value = id;
-    r.checked = i === 0;
+    r.checked = i === start;
     r.addEventListener("change", () => show(i));
     l.appendChild(r);
     l.appendChild(doc.createTextNode(" " + label));
@@ -362,7 +366,7 @@ var renderVisual = function renderVisual(doc, v, prefix, group) {
   });
   box.appendChild(fs);
   box.appendChild(stage);
-  show(0);
+  show(start);
   return box;
 };
 var computeHeat = function computeHeat(input) {
@@ -370,7 +374,7 @@ var computeHeat = function computeHeat(input) {
     const k = s || "(listed in no section)";
     let r = rows.get(k);
     if (!r) {
-      r = { section: k, changed: 0, open: 0, defects: 0, stale: 0, qaFailing: 0, qaWorst: null, qaStale: 0, qaUnaudited: 0, qaBlocks: 0, needReview: 0, reviewed: 0 };
+      r = { section: k, changed: 0, open: 0, defects: 0, stale: 0, qaFailing: 0, qaWorst: null, qaStale: 0, qaUnaudited: 0, qaScriptsOnly: 0, qaNeedsAgent: 0, qaJudgedUnknown: 0, qaBlocks: 0, needReview: 0, reviewed: 0 };
       rows.set(k, r);
     }
     return r;
@@ -420,6 +424,14 @@ var computeHeat = function computeHeat(input) {
         r.qaStale++;
       else if (q.state === "unaudited")
         r.qaUnaudited++;
+      else if (q.state === "passing") {
+        if (typeof q.needsAgent !== "number")
+          r.qaJudgedUnknown++;
+        else if (q.needsAgent > 0) {
+          r.qaScriptsOnly++;
+          r.qaNeedsAgent += q.needsAgent;
+        }
+      }
     }
   }
   const order = [...new Set(input.changes.map((c) => (c.head || c.base || {}).section || "(listed in no section)"))], rest = [...rows.keys()].filter((k) => !order.includes(k)).sort(), all = [...order, ...rest].filter((k) => k !== "(listed in no section)");
@@ -445,7 +457,7 @@ var renderHeat = function renderHeat(doc, h, bucket, jump) {
     ["Open comments", "open or addressed; defects in brackets"],
     ["Stale comments", "the block changed after the comment was made: re-read before replying"],
     ["Review coverage", "changed blocks with a reviewer verdict on their current version; resolved comments do not count"],
-    ["QA", "blocks whose latest QA verdicts fail; stale and unaudited blocks are counted, never read as passing"]
+    ["QA", "blocks whose latest QA verdicts fail; stale and unaudited blocks are counted, never read as passing, and a block whose agent-judged criteria have no verdict passes on scripts only"]
   ], head = doc.createElement("thead"), hr = doc.createElement("tr");
   for (const [name, note] of cols) {
     const th = doc.createElement("th");
@@ -501,7 +513,9 @@ var renderHeat = function renderHeat(doc, h, bucket, jump) {
         parts.push(r.qaStale + " stale");
       if (r.qaUnaudited)
         parts.push(r.qaUnaudited + " unaudited");
-      const text = parts.length ? parts.join(" \xB7 ") : r.qaBlocks ? "passing" : "no blocks";
+      if (r.qaScriptsOnly)
+        parts.push(r.qaScriptsOnly + " passing on scripts only (" + r.qaNeedsAgent + " criteria need an agent)");
+      const judged = r.qaJudgedUnknown ? "passing (this build does not say whether agent-judged criteria were run)" : "passing, every applicable criterion judged", text = parts.length ? parts.join(" \xB7 ") : r.qaBlocks ? judged : "no blocks";
       tr.appendChild(cell(text, bucket(r.qaFailing, mx.qa), r.qaFailing + " block(s) failing, " + r.qaStale + " stale, " + r.qaUnaudited + " unaudited, of " + r.qaBlocks, !r.qaFailing && !r.qaStale && !r.qaUnaudited));
     }
     body.appendChild(tr);
@@ -879,6 +893,8 @@ var renderMinimap = function renderMinimap(doc, outline, mark, jumpBlock) {
         (byLabel[c.targetLabel] = byLabel[c.targetLabel] || []).push(c);
       });
       var main = st.mainSite ? String(st.mainSite).replace(/\/?$/, "/") : null;
+      // Which published site is the before side: main's, or a stacked PR's base preview (5uuf).
+      var beforeName = st.beforeRef || "main";
       var s = cs.summary;
       // The head is "worktree" in CI (the checkout under review), which names
       // nothing a reader recognises; the banner's staging.json has the branch.
@@ -888,6 +904,7 @@ var renderMinimap = function renderMinimap(doc, outline, mark, jumpBlock) {
         s.added + " added, " + s.removed + " removed, " + s.changed + " changed (" +
         s.prose + " reworded, " + s.moved + " moved, " + s.renamed + " renamed, " + s.manifest + " edited), " +
         s.unchanged + " unchanged.";
+      if (main) summary.textContent += " Before side: " + beforeName + "'s published site.";
       if (!rc) summary.textContent += " No comment data on this build.";
       else summary.textContent += " " + rc.comments.length + " review comment(s).";
       if (!cs.changes.length) {
@@ -933,7 +950,7 @@ var renderMinimap = function renderMinimap(doc, outline, mark, jumpBlock) {
           var after = c.change !== "removed" ? href("../", c.head, c.label) : null;
           var before = c.change !== "added" && main ? href(main, c.base, c.from || c.label) : null;
           if (after) { var a = el("a", "view on this preview"); a.href = after; links.appendChild(a); }
-          if (before) { var b = el("a", "view on main"); b.href = before; links.appendChild(b); }
+          if (before) { var b = el("a", "view on " + beforeName); b.href = before; links.appendChild(b); }
           if (!after && !before) links.appendChild(el("span", "no page to link to", "muted"));
           li.appendChild(links);
           var v = viewSelector({

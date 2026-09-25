@@ -34,13 +34,13 @@ function fill(d,f,r){
   var rel=location.pathname.slice(r.length);
   if(rel===''||rel.charAt(rel.length-1)==='/')rel+='index.html';
   if(!f.mainPagesKnown){
-    d.appendChild(link(f.mainSite+'/','compare with main \u2197'));
+    d.appendChild(link(f.mainSite+'/','compare with '+(f.beforeRef||'main')+' \u2197'));
   }else if(f.newPages.indexOf(rel)>=0){
-    d.appendChild(link(f.mainSite+'/','main \u2197'));
+    d.appendChild(link(f.mainSite+'/',(f.beforeRef||'main')+' \u2197'));
     d.appendChild(document.createTextNode(' '));
     d.appendChild(el('span',{style:'opacity:.85'},'(new page)'));
   }else{
-    d.appendChild(link(f.mainSite+'/'+rel,'compare with main \u2197'));
+    d.appendChild(link(f.mainSite+'/'+rel,'compare with '+(f.beforeRef||'main')+' \u2197'));
   }
   d.appendChild(sep());d.appendChild(link(f.runUrl,'build log'));
   stamp(f);
@@ -73,14 +73,35 @@ window.addEventListener('resize',measure);window.addEventListener('load',measure
 <h3>Overview</h3>
 <p><a id="prose:overview"></a>
 <strong>Overview.</strong></p>
-<p>Vaccines lose potency when they are stored outside their temperature range, and the loss cannot be seen. This handbook sets out how to keep every vaccine in its range, from the national store to the vaccination session, and what to do when a vaccine leaves it.</p>
+<p>Vaccines lose potency when they are stored outside their temperature range, and the loss cannot be seen. This handbook sets out how to keep every vaccine in its range, from the national store to the vaccination session, and what to do when a vaccine leaves it, including whom to tell.</p>
 <p><a id="tbl:storage-temperatures"></a>
 <strong>Table.</strong> <em>Storage temperatures</em></p>
-<p>| Vaccine type | Store at | Never |
-|---|---|---|
-| Live attenuated (oral) | −25 °C to −15 °C | above +8 °C |
-| Inactivated | +2 °C to +8 °C | frozen, even once |
-| mRNA | −90 °C to −60 °C | thawed and refrozen |</p>
+<table>
+<thead>
+<tr>
+<th>Vaccine type</th>
+<th>Store at</th>
+<th>Never</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Live attenuated (oral)</td>
+<td>−25 °C to −15 °C</td>
+<td>above +8 °C</td>
+</tr>
+<tr>
+<td>Inactivated</td>
+<td>+2 °C to +8 °C</td>
+<td>frozen, even once</td>
+</tr>
+<tr>
+<td>mRNA</td>
+<td>−90 °C to −60 °C</td>
+<td>thawed and refrozen</td>
+</tr>
+</tbody>
+</table>
 
 </main>
 </body>
