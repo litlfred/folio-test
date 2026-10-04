@@ -28,7 +28,11 @@ jobs:
           repository: litlfred/folio-assistant
           ref: ${{ inputs.ref || '8ea9e47b1ca82f0ac2726c5cc92c5eda8f33ba98' }}
           path: platform
-          submodules: true
+          # Public repository: no credentials, and submodules by plain git below.
+          # With credentials persisted, actions/checkout sends the auth header
+          # twice when a sparse, partial clone fetches its submodules
+          # ("Duplicate header: Authorization", HTTP 400) — run 1 died there.
+          persist-credentials: false
           sparse-checkout-cone-mode: false
           sparse-checkout: |
             /folio-assistant-core/
@@ -40,6 +44,10 @@ jobs:
             /bun.lock
             /tsconfig.json
             /bunfig.toml
+
+      - name: The layer's submodules (bootstrap, bootstrap-tools)
+        working-directory: platform
+        run: git submodule update --init --depth 1
 
       - uses: oven-sh/setup-bun@v2
 
