@@ -1,0 +1,59 @@
+# zmdo proof — litlfred/folio-assistant bean zmdo, the owner's MVP from bean tndo:
+# "folio_init creates a working folio against that layer ALONE, in an empty repository."
+#
+# This repository is the empty repository. The platform is sparse-checked-out with ONLY
+# the layer `folio-assistant-core` and the instances it `needs` — no aggregate declaration at the root —
+# because the layer's own repository is not seeded yet. Ruled by the owner 2026-10-04.
+name: zmdo proof (folio-assistant-core alone, document)
+
+on:
+  push:
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: folio-assistant commit to prove
+        default: 8ea9e47b1ca82f0ac2726c5cc92c5eda8f33ba98
+
+jobs:
+  proof:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: probe-repo
+
+      - name: Platform — the layer and its needs closure only
+        uses: actions/checkout@v4
+        with:
+          repository: litlfred/folio-assistant
+          ref: ${{ inputs.ref || '8ea9e47b1ca82f0ac2726c5cc92c5eda8f33ba98' }}
+          path: platform
+          submodules: true
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /folio-assistant-core/
+            /cat-harness/
+            /cat-harness-tools/
+            /bootstrap/
+            /bootstrap-tools/
+            /package.json
+            /bun.lock
+            /tsconfig.json
+            /bunfig.toml
+
+      - uses: oven-sh/setup-bun@v2
+
+      - name: Install platform dependencies
+        working-directory: platform
+        run: bun install --frozen-lockfile
+
+      - name: Install beans
+        run: |
+          platform/cat-harness/scripts/install-beans.sh
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+
+      - name: An empty repository beside it
+        run: mkdir fresh && git -C fresh init -q
+
+      - name: Prove the four conditions
+        run: bun run probe-repo/zmdo-check.ts --platform platform --fresh fresh --layer folio-assistant-core --mode document
