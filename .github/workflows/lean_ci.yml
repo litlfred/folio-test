@@ -136,9 +136,12 @@ jobs:
       - name: Install Bun
         uses: oven-sh/setup-bun@v2
 
-      - name: Install the platform's dependencies
+      # The platform is an INDEX: its layers are mounted from its
+      # index.lock.json by the mounter it ships, not checked out.
+      - name: Mount the platform's layers and install their dependencies
         run: |
           cd "folio-assistant"
+          bash .github/mount-from-lock.sh --root .
           bun install --frozen-lockfile
 
       - name: Build content objects to LaTeX chapters
