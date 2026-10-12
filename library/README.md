@@ -14,5 +14,5 @@ library/<doc-id>/
 **Nothing here is folio content.** Every node carries
 `provenance: "ingested"` and is attributed to its source, so a query can
 always separate *what that document claims* from *what this folio claims*.
-Promoting something into `content/` is a separate, deliberate act — see the
+Promoting something into `folio/` is a separate, deliberate act — see the
 platform's `document-intake` skill.

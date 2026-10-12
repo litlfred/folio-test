@@ -1,10 +1,21 @@
+# State graphs kept on their own branches, mounted here by state:mount (never committed to main)
+/beans/**
+/todos/**
+/fsh-guts/**
+
 # Build output
 build/
+_site/
 .folio-feedback/
 node_modules/
 
 # Generated QA reports
 bib-qa.json
+
+# The QA working copy: machine-written, and recorded on the orphan qa-reports
+# branch, not on main (skills/sdlc/sdlc-core/qa-reports.md). Attestations
+# under test/attestations/ ARE committed. (bean 5qy8)
+test/results/
 
 # Editor / OS
 .DS_Store
@@ -13,3 +24,10 @@ bib-qa.json
 # Lean build artifacts
 .lake/
 *.olean
+
+# Raw Lean build logs — the JSON sidecars beside them are committed
+build-logs/*.log
+build-logs/*.tsv
+
+# BEGIN index mounts (generated from index.config.json — do not edit)
+# END index mounts

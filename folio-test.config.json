@@ -1,0 +1,23 @@
+{
+  "contentType": "paper",
+  "adapter": "paper",
+  "adapterModule": "./folio-assistant/folio-assistant-sci/adapters/paper/index.ts",
+  "dependencies": {
+    "folioAssistant": [
+      {
+        "name": "folio-assistant-sci",
+        "path": "folio-assistant/folio-assistant-sci"
+      }
+    ]
+  },
+  "feedbackDir": ".folio-feedback",
+  "skills": ".claude/skills/local",
+  "viewer": {
+    "dir": "folio-assistant/cat-harness-tools/viewer",
+    "port": 8080
+  },
+  "readme": {
+    "linkStyle": "blob",
+    "publishRef": "gh-pages"
+  }
+}

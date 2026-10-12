@@ -1,0 +1,37 @@
+name: Staging preview
+
+# A before/after preview of this folio for every pull request, published to
+# STAGING/<branch>/ on gh-pages, with the ChangeSet (what changed, block by
+# block) beside it. A push to main publishes main's site at the gh-pages root:
+# the "before" side. The mechanics live in the platform's reusable workflow.
+#
+# TO ENABLE (a paper folio builds through publish.yml, so its site is yours
+# to name):
+#   1. Set build_command below to the command that builds this folio's site.
+#   2. Uncomment the pull_request trigger.
+# Until then it runs only when dispatched, and the build step refuses.
+
+on:
+  workflow_dispatch:
+  # push:
+  #   branches: [main]
+  # pull_request:
+  #   types: [opened, synchronize, reopened]
+  # issue_comment:
+  #   types: [created, edited]
+
+# What the reusable workflow needs, and no more: publish the preview, comment
+# on the pull request, and read its comments for the review page.
+permissions:
+  contents: write
+  pull-requests: write
+  issues: read
+
+jobs:
+  staging:
+    uses: litlfred/folio-assistant/.github/workflows/folio-staging.yml@main
+    with:
+      build_command: 'echo "::error::set build_command in .github/workflows/staging.yml to build this folio''s site" && exit 1'
+      site_dir: _site
+      folio_dir: folio
+      platform_dir: folio-assistant

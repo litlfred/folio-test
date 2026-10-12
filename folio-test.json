@@ -1,0 +1,54 @@
+{
+  "$schema": "cat-harness-declaration/1.0.0",
+  "name": "folio-test",
+  "title": "Folio Test",
+  "directories": [
+    {
+      "id": "folio",
+      "path": "folio/",
+      "graphTypologies": [
+        "folio"
+      ],
+      "description": "The content of Folio Test — its document, chapters and blocks."
+    },
+    {
+      "id": "beans",
+      "path": "beans/",
+      "graphTypologies": [
+        "beans"
+      ],
+      "source": {
+        "kind": "branch",
+        "branch": "cat/folio-test/beans",
+        "keyedBy": "tip"
+      },
+      "description": "This instance's work plan — one Markdown file per bean, managed with the `beans` CLI (`.beans.yml`)."
+    },
+    {
+      "id": "todos",
+      "path": "todos/",
+      "graphTypologies": [
+        "todos"
+      ],
+      "source": {
+        "kind": "branch",
+        "branch": "cat/folio-test/todos",
+        "keyedBy": "tip"
+      },
+      "description": "People's outstanding items and the feedback raised against blocks; its inner directories are declared by `todos/todos.json`."
+    },
+    {
+      "id": "fsh-guts",
+      "path": "fsh-guts/",
+      "graphTypologies": [
+        "fsh-guts"
+      ],
+      "source": {
+        "kind": "branch",
+        "branch": "cat/folio-test/fsh-guts",
+        "keyedBy": "tip"
+      },
+      "description": "The trashcan that is kept: deprecated and removed content, each node declaring itself `folio-fsh-guts/v1` with where it came from. Where a cutover deposits the directory it removes from main. Never rendered."
+    }
+  ]
+}

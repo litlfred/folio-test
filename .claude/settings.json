@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "folio-assistant/scripts/session-start-coord-sweep.sh"
+            "command": "folio-assistant/cat-harness-tools/scripts/session-start-coord-sweep.sh"
           }
         ]
       }
