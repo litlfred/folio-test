@@ -1,0 +1,13 @@
+{
+  "$schema": "folio-index-config/v1",
+  "instances": [
+    {
+      "name": "folio-test",
+      "source": {
+        "local": {
+          "at": "."
+        }
+      }
+    }
+  ]
+}

@@ -4,7 +4,7 @@
       "command": "bun",
       "args": [
         "run",
-        "folio-assistant/src/index.ts",
+        "folio-assistant/cat-harness-tools/src/index.ts",
         "--stdio",
         "--repo",
         "."

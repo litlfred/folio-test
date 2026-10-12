@@ -26,33 +26,55 @@ works on a machine with no TeX, which is the usual case while drafting.
 ## Layout
 
 ```
-content/folio-test/          the document
+folio/folio-test/          the document
   folio-test.ts             its manifest — chapters, in reading order
   <chapter>/<chapter>.ts   a chapter manifest — sections, in reading order
   <chapter>/<root>.ts      a block manifest
   <chapter>/<root>.md      that block's prose
-  <chapter>/<root>.qa.json QA sidecar (machine-written — never hand-edit)
-content/schema/            re-export shim for the platform's builders
+folio/schema/            re-export shim for the platform's builders
+test/results/block-qa/     QA verdicts, one per block, mirroring folio/ (machine-written working copy — published to qa-reports)
+test/attestations/        reviewer judgements and baseline attestations (committed on main)
 library/                   ingested source documents (read-only reference)
 uploads/                   source PDFs, for offline citation verification
 folio-assistant/              the platform
-.beans/                    the work plan
+beans/                    the work plan (mounted from its declared branch)
+todos/                    people's outstanding items (mounted likewise)
 ```
 
 ## Commands
 
 ```sh
-bun run folio-assistant/src/index.ts --stdio --repo .   # the MCP server
-bun run folio-assistant/src/index.ts --check-deps       # what's installed
+bun run folio-assistant/cat-harness-tools/src/index.ts --stdio --repo .   # the MCP server
+bun run folio-assistant/cat-harness-tools/src/index.ts --check-deps       # what's installed
+bun run folio-assistant/cat-harness-tools/content/pipeline/qa-sweep.ts folio  # QA every block
 ```
+
+## QA — every block is checked from the first commit
+
+`qa-sweep` runs every criterion a script can check against each block, and
+writes one verdict file per block under `test/results/block-qa/`. Derived QA
+verdicts live on the orphan `qa-reports` branch (published by CI), rather than
+being committed to `main`. Judgements stay on `main` in `test/attestations/`.
+The working copy under `test/results/` is machine-written.
+
+The staging preview sweeps each pull request as well (`.github/workflows/staging.yml`),
+so the review page's QA column reports that build. `.github/workflows/qa-sweep.yml`
+runs the full sweep in CI, and `qa-sweep-nightly.yml` refreshes stale verdicts;
+both are dispatch-only until you enable their triggers. Criteria that need an
+agent's judgement (voice, exposition, adversarial review) are not run by the
+sweep; they stay unaudited until an agent records them.
 
 ## Work plan — use `beans`
 
-`.beans/` is committed, so the plan survives a fresh container and a sibling
-session sees it. Claim before you work; never resolve a sibling's bean.
+`beans/` and `todos/` are this folio's STATE. Where each is kept is declared
+in `folio-test.json` — by default on its own branch,
+`cat/folio-test/beans` and `cat/folio-test/todos`, mounted at those paths by the
+session-start hook (`state:mount`) and never committed to `main`. Either way
+the plan survives a fresh container and a sibling session sees it. Claim before
+you work; never resolve a sibling's bean.
 
 ```sh
-folio-assistant/scripts/install-beans.sh
+folio-assistant/cat-harness-tools/scripts/install-beans.sh
 beans list
 beans create "<title>"
 beans <id> --status in-progress
