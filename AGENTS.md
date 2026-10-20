@@ -46,7 +46,7 @@ todos/                    people's outstanding items (mounted likewise)
 ```sh
 bun run folio-assistant/cat-harness-tools/src/index.ts --stdio --repo .   # the MCP server
 bun run folio-assistant/cat-harness-tools/src/index.ts --check-deps       # what's installed
-bun run folio-assistant/cat-harness-tools/content/pipeline/qa-sweep.ts folio  # QA every block
+bun run folio-assistant/cat-harness-tools/pipeline/qa-sweep.ts folio  # QA every block
 ```
 
 ## QA — every block is checked from the first commit
