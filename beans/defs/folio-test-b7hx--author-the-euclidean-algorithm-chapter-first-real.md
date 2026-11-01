@@ -1,10 +1,10 @@
 ---
 # folio-test-b7hx
 title: Author the Euclidean algorithm chapter — first real content in folio-test
-status: in-progress
+status: completed
 type: task
 created_at: 2026-08-28T20:00:26Z
-updated_at: 2026-08-28T20:00:26Z
+updated_at: 2026-11-01T09:58:00Z
 ---
 
 Exercise the authoring path end to end: a new chapter with three sections and nine blocks across prose/remark/lemma/proof/algorithm/example/table/theorem, with a genuine uses[] dependency graph.
@@ -55,3 +55,10 @@ instrument; the defect was the result.
 
 Unverified: `paper_render_pdf` and the Lean lifecycle. No TeX Live, and elan's
 hosts are 403 under this environment's network policy.
+
+## Closed 2026-11-01
+
+The chapter is on `main` at `folio/folio-test/euclidean-algorithm/`. The two
+unverified items above (`paper_render_pdf`, the Lean lifecycle) were limits of
+the authoring environment, not open work on this bean. Closed during the
+fhir-harness / who-iris / folio-test issue drain.
